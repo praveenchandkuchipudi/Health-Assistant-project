@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Medical Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .dropdown {
+            margin-top: 10px;
+            overflow-y: auto;
+            max-height: 150px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .dropdown p {
+            margin: 0;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .dropdown p:hover {
+            background-color: #f1f1f1;
+        }
+        .search-box button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-box button:hover {
+            background-color: #0056b3;
+        }
+        .qa-block {
+            margin-bottom: 20px;
+        }
+        .qa-block h3 {
+            color: #333;
+            margin: 10px 0;
+        }
+        .qa-block p {
+            color: #555;
+            line-height: 1.5;
+        }
+        .no-results {
+            text-align: center;
+            color: red;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>AI Medical Assistant</h1>
+
+        <!-- Single placeholder for custom and predefined questions -->
+        <div class="search-box">
+            <input type="text" id="searchQuery" placeholder="Enter your question or select below...">
+            <div class="dropdown" id="predefinedQuestions">
+                <p onclick="selectPredefinedQuestion(0)">What are the symptoms of diabetes?</p>
+                <p onclick="selectPredefinedQuestion(1)">How to reduce high blood pressure?</p>
+                <p onclick="selectPredefinedQuestion(2)">What is the normal body temperature?</p>
+                <p onclick="selectPredefinedQuestion(3)">What are the causes of headaches?</p>
+                <p onclick="selectPredefinedQuestion(4)">How can I improve my immunity?</p>
+                <p onclick="selectPredefinedQuestion(5)">What are the symptoms of flu?</p>
+                <p onclick="selectPredefinedQuestion(6)">How to treat a common cold?</p>
+                <p onclick="selectPredefinedQuestion(7)">What is the normal heart rate?</p>
+                <p onclick="selectPredefinedQuestion(8)">What are the benefits of drinking water?</p>
+                <p onclick="selectPredefinedQuestion(9)">How to manage stress?</p>
+                <p onclick="selectPredefinedQuestion(10)">What is the role of vitamins in the body?</p>
+            </div>
+            <button onclick="searchQuestion()">Search</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Sample questions and answers
+        const medicalData = [
+            {
+                question: "What are the symptoms of diabetes?",
+                answer: "Common symptoms of diabetes include increased thirst, frequent urination, extreme hunger, weight loss, fatigue, and blurred vision."
+            },
+            {
+                question: "How to reduce high blood pressure?",
+                answer: "You can reduce high blood pressure by eating a healthy diet, exercising regularly, reducing sodium intake, avoiding alcohol, and managing stress."
+            },
+            {
+                question: "What is the normal body temperature?",
+                answer: "The normal body temperature is approximately 98.6°F (37°C), but it can range between 97°F (36.1°C) and 99°F (37.2°C)."
+            },
+            {
+                question: "What are the causes of headaches?",
+                answer: "Headaches can be caused by stress, dehydration, lack of sleep, poor posture, certain foods, or underlying medical conditions like migraines or sinus issues."
+            },
+            {
+                question: "How can I improve my immunity?",
+                answer: "To boost your immunity, eat a balanced diet rich in vitamins, exercise regularly, get adequate sleep, stay hydrated, and manage stress."
+            },
+            {
+                question: "What are the symptoms of flu?",
+                answer: "Flu symptoms include fever, chills, cough, sore throat, runny or stuffy nose, muscle or body aches, fatigue, and sometimes vomiting and diarrhea."
+            },
+            {
+                question: "How to treat a common cold?",
+                answer: "To treat a common cold, rest, stay hydrated, use over-the-counter medications, and consider remedies like honey and warm liquids."
+            },
+            {
+                question: "What is the normal heart rate?",
+                answer: "A normal resting heart rate for adults ranges from 60 to 100 beats per minute."
+            },
+            {
+                question: "What are the benefits of drinking water?",
+                answer: "Drinking water helps maintain body temperature, lubricate joints, prevent dehydration, aid digestion, and support overall health."
+            },
+            {
+                question: "How to manage stress?",
+                answer: "Manage stress by practicing mindfulness, exercising, maintaining a healthy lifestyle, seeking social support, and setting realistic goals."
+            },
+            {
+                question: "What is the role of vitamins in the body?",
+                answer: "Vitamins support various bodily functions, including immune system health, energy production, and cell repair."
+            }
+        ];
+
+        // Function to select predefined question
+        function selectPredefinedQuestion(index) {
+            const queryInput = document.getElementById("searchQuery");
+            queryInput.value = medicalData[index].question;
+            searchQuestion();
+        }
+
+        // Function to search for questions
+        function searchQuestion() {
+            const query = document.getElementById("searchQuery").value.toLowerCase();
+            const resultsDiv = document.getElementById("results");
+
+            // Clear previous results
+            resultsDiv.innerHTML = "";
+
+            const filteredData = medicalData.filter(item =>
+                item.question.toLowerCase().includes(query)
+            );
+
+            if (filteredData.length > 0) {
+                filteredData.forEach(item => {
+                    const qaBlock = document.createElement("div");
+                    qaBlock.classList.add("qa-block");
+
+                    const questionElement = document.createElement("h3");
+                    questionElement.textContent = item.question;
+
+                    const answerElement = document.createElement("p");
+                    answerElement.textContent = item.answer;
+
+                    qaBlock.appendChild(questionElement);
+                    qaBlock.appendChild(answerElement);
+
+                    resultsDiv.appendChild(qaBlock);
+                });
+            } else {
+                const noResults = document.createElement("p");
+                noResults.classList.add("no-results");
+                noResults.textContent = "No results found. Please try a different query.";
+                resultsDiv.appendChild(noResults);
+            }
+        }
+    </script>
+
+</body>
+</html>
