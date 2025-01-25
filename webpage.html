@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Assistant - Your Health Companion</title>
+    <style>
+        .calorie-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .calorie-calculator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .calorie-input {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .calorie-input input, .calorie-input select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .calorie-result {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #7ed6df;
+            --background-color: #f0f4f8;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .menu-bar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-items {
+            display: flex;
+            gap: 20px;
+        }
+        .menu-items a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .menu-items a:hover {
+            color: var(--secondary-color);
+        }
+        .greeting {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+        .bmi-section, .services-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .services-section .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            max-width: 100px;
+            margin-bottom: 15px;
+        }
+        .card a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .card a:hover {
+            background-color: #3a7bd5;
+        }
+        /* Previous BMI Calculator Styles */
+        .bmi-calculator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .bmi-input {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .bmi-input input, .bmi-input select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .bmi-result {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #3a7bd5;
+        }
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .category {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .underweight { background-color: #82ccdd; }
+        .normal { background-color: #6ab04c; color: white; }
+        .overweight { background-color: #f6b93b; }
+        .obese { background-color: #e55039; color: white; }
+    </style>
+</head>
+<body>
+    <div class="menu-bar">
+        <div class="logo">Medical Assistant</div>
+        <div class="menu-items">
+            <a href="#bmi">BMI Calculator</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="greeting" id="greeting">Hi, Guest</div>
+
+        <div class="bmi-section" id="bmi">
+            <h2>BMI Calculator</h2>
+            <div class="bmi-calculator">
+                <div class="bmi-input">
+                    <select id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <input type="number" id="weight" placeholder="Weight (kg)" required>
+                    <input type="number" id="height" placeholder="Height (cm)" required>
+                    <input type="number" id="age" placeholder="Age (years)" required>
+                    <button class="submit-btn" onclick="calculateBMI()">Calculate BMI</button>
+                </div>
+                <div class="bmi-result" id="bmiResult">
+                    <h3>Your BMI Results</h3>
+                    <p>Enter your details to calculate BMI</p>
+                </div>
+            </div>
+            <div class="categories">
+                <div class="category underweight">Underweight: &lt; 18.5</div>
+                <div class="category normal">Normal: 18.5 - 24.9</div>
+                <div class="category overweight">Overweight: 25 - 29.9</div>
+                <div class="category obese">Obese: 30+</div>
+            </div>
+        </div>
+
+        <div class="services-section" id="services">
+            <h2>Our Services</h2>
+            <div class="cards">
+                <div class="card">
+                    <img src="https://cdn1.iconfinder.com/data/icons/medical-health-care-blue-series-set-4/64/b-68-1024.png" alt="Exercise">
+                    <h3>Exercise Plans</h3>
+                    <p>Customized workout routines for every individual.</p>
+                    <a href="exercise.html">View Exercise Plans</a>
+                </div>
+                <div class="card">
+                    <img src="https://static.vecteezy.com/system/resources/previews/013/899/525/original/healthy-diet-icon-for-graphic-and-web-design-vector.jpg" alt="Diet">
+                    <h3>Diet Plans</h3>
+                    <p>Tailored nutrition plans for your body needs.</p>
+                    <a href="dietplan.html">View Diet Plans</a>
+                </div>
+                <div class="card">
+                    <img src="https://static.vecteezy.com/system/resources/previews/035/662/671/original/water-intake-concept-line-icon-simple-element-illustration-water-intake-concept-outline-symbol-design-free-vector.jpg" alt="Water Intake">
+                    <h3>Water Intake</h3>
+                    <p>Resources and support for hydration.</p>
+                    <a href="water.html">View Water Intakes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="calorie-section" id="calorie-calculator">
+            <h2>Daily Calorie Intake Calculator</h2>
+            <div class="calorie-calculator">
+                <div class="calorie-input">
+                    <select id="activity-level" required>
+                        <option value="">Select Activity Level</option>
+                        <option value="sedentary">Sedentary (Little/No Exercise)</option>
+                        <option value="light">Light Exercise (1-3 days/week)</option>
+                        <option value="moderate">Moderate Exercise (3-5 days/week)</option>
+                        <option value="heavy">Heavy Exercise (6-7 days/week)</option>
+                        <option value="very-heavy">Very Heavy Exercise (Twice daily)</option>
+                    </select>
+                    <select id="fitness-goal" required>
+                        <option value="">Select Fitness Goal</option>
+                        <option value="lose">Weight Loss</option>
+                        <option value="maintain">Maintain Weight</option>
+                        <option value="gain">Weight Gain</option>
+                    </select>
+                    <select id="body-type" required>
+                        <option value="">Select Body Type</option>
+                        <option value="ectomorph">Ectomorph (Lean & Thin)</option>
+                        <option value="mesomorph">Mesomorph (Muscular & Athletic)</option>
+                        <option value="endomorph">Endomorph (Larger & Rounder)</option>
+                    </select>
+                    <button class="submit-btn" onclick="calculateCalories()">Calculate Calories</button>
+                </div>
+                <div class="calorie-result" id="calorieResult">
+                    <h3>Your Daily Calorie Needs</h3>
+                    <p>Select your details to calculate calorie intake</p>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <script>
+
+        function calculateBMI() {
+            const gender = document.getElementById('gender').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100;
+            const age = parseInt(document.getElementById('age').value);
+
+            if (!gender || !weight || !height || !age) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const bmi = (weight / (height * height)).toFixed(2);
+            let category = '';
+            let categoryClass = '';
+
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                categoryClass = 'underweight';
+            } else if (bmi >= 18.5 && bmi < 25) {
+                category = 'Normal weight';
+                categoryClass = 'normal';
+            } else if (bmi >= 25 && bmi < 30) {
+                category = 'Overweight';
+                categoryClass = 'overweight';
+            } else {
+                category = 'Obese';
+                categoryClass = 'obese';
+            }
+
+            const resultDiv = document.getElementById('bmiResult');
+            resultDiv.innerHTML = `
+                <h3>Your BMI Results</h3>
+                <p>BMI: <strong>${bmi}</strong></p>
+                <p class="${categoryClass}">Category: ${category}</p>
+                <small>Note: BMI is a screening tool, not a diagnostic test.</small>
+            `;
+        }
+
+
+        function displayGreeting() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            const username = userData ? userData.username : 'Guest';
+            document.getElementById('greeting').textContent = `Hi, ${username}`;
+        }
+
+
+        window.onload = displayGreeting;
+
+        function calculateCalories() {
+            const activityLevel = document.getElementById('activity-level').value;
+            const fitnessGoal = document.getElementById('fitness-goal').value;
+            const bodyType = document.getElementById('body-type').value;
+
+            if (!activityLevel || !fitnessGoal || !bodyType) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+
+            let baseCalories = 2000; 
+
+
+            switch(activityLevel) {
+                case 'sedentary': baseCalories *= 1.2; break;
+                case 'light': baseCalories *= 1.375; break;
+                case 'moderate': baseCalories *= 1.55; break;
+                case 'heavy': baseCalories *= 1.725; break;
+                case 'very-heavy': baseCalories *= 1.9; break;
+            }
+
+
+            switch(fitnessGoal) {
+                case 'lose': baseCalories -= 500; break;
+                case 'gain': baseCalories += 500; break;
+
+            }
+
+
+            switch(bodyType) {
+                case 'ectomorph': baseCalories *= 1.2; break;
+                case 'mesomorph': baseCalories *= 1.1; break;
+                case 'endomorph': baseCalories *= 0.9; break;
+            }
+
+            const calorieResult = document.getElementById('calorieResult');
+            calorieResult.innerHTML = `
+                <h3>Your Daily Calorie Needs</h3>
+                <p>Recommended Daily Intake: <strong>${Math.round(baseCalories)} calories</strong></p>
+                <small>Personalized based on your activity, goal, and body type</small>
+            `;
+        }
+    </script>
+</body>
+</html>

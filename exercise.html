@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Assistant - Exercise Plan</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #7ed6df;
+            --background-color: #f0f4f8;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #3a7bd5;
+        }
+        .exercise-result {
+            margin-top: 30px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .exercise-result h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personalized Exercise Plan</h1>
+
+        <div class="form-group">
+            <label for="exercise-type">Select Exercise Type</label>
+            <select id="exercise-type">
+                <option value="running">Running</option>
+                <option value="cycling">Cycling</option>
+                <option value="swimming">Swimming</option>
+                <option value="yoga">Yoga</option>
+                <option value="strength-training">Strength Training</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="exercise-time">Exercise Duration (Minutes)</label>
+            <input type="number" id="exercise-time" placeholder="Enter time in minutes" min="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="bmi">Your BMI</label>
+            <input type="number" id="bmi" placeholder="Enter BMI" step="0.1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="age">Your Age</label>
+            <input type="number" id="age" placeholder="Enter Age" min="1" required>
+        </div>
+
+        <button class="button" onclick="calculateCalories()">Generate Exercise Plan</button>
+
+        <div id="exercise-result" class="exercise-result" style="display: none;">
+            <h3>Your Exercise Insights</h3>
+            <p id="exercise-suggestion"></p>
+            <p id="calories-burned"></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateCalories() {
+            const exerciseType = document.getElementById('exercise-type').value;
+            const exerciseTime = parseFloat(document.getElementById('exercise-time').value);
+            const bmi = parseFloat(document.getElementById('bmi').value);
+            const age = parseInt(document.getElementById('age').value);
+
+            if (isNaN(exerciseTime) || isNaN(bmi) || isNaN(age) || exerciseTime <= 0 || bmi <= 0 || age <= 0) {
+                alert('Please enter valid details for all fields.');
+                return;
+            }
+
+            let caloriesPerMinute = 0;
+
+            switch (exerciseType) {
+                case 'running': caloriesPerMinute = 0.063 * bmi; break;
+                case 'cycling': caloriesPerMinute = 0.049 * bmi; break;
+                case 'swimming': caloriesPerMinute = 0.075 * bmi; break;
+                case 'yoga': caloriesPerMinute = 0.034 * bmi; break;
+                case 'strength-training': caloriesPerMinute = 0.055 * bmi; break;
+                default: alert('Unknown exercise type.'); return;
+            }
+
+            if (age > 40) {
+                caloriesPerMinute *= 0.9;
+            }
+
+            const totalCalories = caloriesPerMinute * exerciseTime;
+
+            const exerciseSuggestion = `For your selected exercise: ${exerciseType}, it's recommended for you to do it for ${exerciseTime} minutes.`;
+            const caloriesBurnedMessage = `You will burn approximately ${totalCalories.toFixed(2)} calories.`;
+
+            document.getElementById('exercise-suggestion').textContent = exerciseSuggestion;
+            document.getElementById('calories-burned').textContent = caloriesBurnedMessage;
+
+            document.getElementById('exercise-result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
