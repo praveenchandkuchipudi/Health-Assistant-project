@@ -1,4 +1,4 @@
-/*=============== LOGIN ===============*/
+
 .login{
    position: relative;
    height: 100vh;
@@ -124,13 +124,13 @@
    }
 }
 
-/* Input focus move up label */
+
 .login__input:focus + .login__label{
    top: -12px;
    font-size: var(--small-font-size);
 }
 
-/* Input focus sticky top label */
+
 .login__input:not(:placeholder-shown).login__input:not(:focus) + .login__label{
    top: -12px;
    font-size: var(--small-font-size);
