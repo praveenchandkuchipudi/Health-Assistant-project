@@ -9,7 +9,7 @@
 </head>
 <body>
    <div class="login">
-      <img src="assets/img/login-bg.png" alt="login image" class="login__img">
+      <img src="assets/img/login-bg.png" alt="A person logging in" class="login__img">
 
       <form onsubmit="return verify(event)" class="login__form">
          <h1 class="login__title">Login</h1>
@@ -52,18 +52,23 @@
    <script>
       function verify(event) {
          event.preventDefault(); 
-         var email = document.getElementById("login-email").value;
-         var password = document.getElementById("login-pass").value;
+         const email = document.getElementById("login-email").value;
+         const password = document.getElementById("login-pass").value;
 
-         
-         if (email === "hello@gmail.com" && password === "123") {
-            window.location.href = "details.html"; 
+         // Regex for password validation: at least 9 characters, at least one letter, one number, and one special character
+         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{9,}$/;
+
+         // Check if the email ends with @gmail.com
+         if (!email.endsWith("@gmail.com")) {
+            alert("Please enter a valid Gmail address.");
+         } else if (!passwordRegex.test(password)) {
+            alert("Password must be at least 9 characters long, include at least one number, one alphabet, and one special character.");
          } else {
-            alert("Invalid email or password. Please try again."); 
+            // Simulate successful login
+            window.location.href = "details.html"; 
          }
       }
 
-      
       function togglePassword() {
          const passwordInput = document.getElementById("login-pass");
          const eyeIcon = document.getElementById("login-eye");
