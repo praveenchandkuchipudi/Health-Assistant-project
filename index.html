@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+   <link rel="stylesheet" href="assets/css/styles.css">
+   <title>Registration Page</title>
+</head>
+<body>
+   <div class="register">
+      <img src="assets/img/register-bg.png" alt="A person registering" class="register__img">
+
+      <form onsubmit="return registerUser(event)" class="register__form">
+         <h1 class="register__title">Register</h1>
+
+         <div class="register__content">
+            <div class="register__box">
+               <i class="ri-user-3-line register__icon"></i>
+               <div class="register__box-input">
+                  <input type="text" required class="register__input" id="name" placeholder=" ">
+                  <label for="name" class="register__label">Full Name</label>
+               </div>
+            </div>
+
+            <div class="register__box">
+               <i class="ri-calendar-line register__icon"></i>
+               <div class="register__box-input">
+                  <input type="date" required class="register__input" id="dob" placeholder=" ">
+                  <label for="dob" class="register__label">Date of Birth</label>
+               </div>
+            </div>
+
+            <div class="register__box">
+               <i class="ri-phone-line register__icon"></i>
+               <div class="register__box-input">
+                  <input type="tel" required class="register__input" id="phone" placeholder=" ">
+                  <label for="phone" class="register__label">Phone Number</label>
+               </div>
+            </div>
+
+            <div class="register__box">
+               <i class="ri-mail-line register__icon"></i>
+               <div class="register__box-input">
+                  <input type="email" required class="register__input" id="email" placeholder=" ">
+                  <label for="email" class="register__label">Gmail ID</label>
+               </div>
+            </div>
+
+            <div class="register__box">
+               <i class="ri-lock-2-line register__icon"></i>
+               <div class="register__box-input">
+                  <input type="password" required class="register__input" id="password" placeholder=" ">
+                  <label for="password" class="register__label">Password</label>
+               </div>
+            </div>
+
+            <div>
+               <button type="button" class="register__button" onclick="sendOtp()">Verify Gmail</button>
+               <input type="text" id="otp" placeholder="Enter OTP" class="register__input" style="display: none;">
+               <button type="button" id="verify-otp-btn" onclick="verifyOtp()" class="register__button" style="display: none;">Verify OTP</button>
+               <p id="otp-message" style="color: red;"></p>
+            </div>
+         </div>
+
+         <button type="submit" class="register__button" id="submit-btn" disabled>Submit</button>
+      </form>
+   </div>
+
+   <script>
+      let generatedOtp = null;
+      let otpTimer;
+
+      function sendOtp() {
+         const email = document.getElementById("email").value;
+         if (!email.endsWith("@gmail.com")) {
+            alert("Please enter a valid Gmail address.");
+            return;
+         }
+
+         // Generate OTP
+         generatedOtp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+         alert(OTP sent to ${email}: ${generatedOtp}); // Simulate email by showing OTP in alert
+
+         // Show OTP input field
+         document.getElementById("otp").style.display = "block";
+         document.getElementById("verify-otp-btn").style.display = "inline-block";
+
+         // Start 2-minute timer
+         clearTimeout(otpTimer);
+         otpTimer = setTimeout(() => {
+            generatedOtp = null;
+            document.getElementById("otp-message").textContent = "OTP expired. Please resend.";
+         }, 120000);
+      }
+
+      function verifyOtp() {
+         const enteredOtp = document.getElementById("otp").value;
+         if (parseInt(enteredOtp) === generatedOtp) {
+            alert("OTP verified successfully!");
+            document.getElementById("submit-btn").disabled = false;
+            document.getElementById("otp-message").textContent = "";
+            clearTimeout(otpTimer);
+         } else {
+            alert("Incorrect OTP. Please try again.");
+            document.getElementById("otp").value = "";
+         }
+      }
+
+      function registerUser(event) {
+         event.preventDefault();
+
+         const name = document.getElementById("name").value;
+         const dob = document.getElementById("dob").value;
+         const phone = document.getElementById("phone").value;
+         const email = document.getElementById("email").value;
+         const password = document.getElementById("password").value;
+
+         // Store user data in localStorage
+         localStorage.setItem("user", JSON.stringify({ name, dob, phone, email, password }));
+
+         alert("Registration successful!");
+         window.location.href = "login.html"; // Redirect to login page
+      }
+   </script>
+</body>
+</html>
