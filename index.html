@@ -11,7 +11,7 @@
    <div class="register">
       <img src="assets/img/register-bg.png" alt="A person registering" class="register__img">
 
-      <form onsubmit="return registerUser(event)" class="register__form">
+      <form onsubmit="return registerUser (event)" class="register__form">
          <h1 class="register__title">Register</h1>
 
          <div class="register__content">
@@ -73,14 +73,17 @@
 
       function sendOtp() {
          const email = document.getElementById("email").value;
-         if (!email.endsWith("@gmail.com")) {
+
+         // Basic email validation
+         const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+         if (!emailPattern.test(email)) {
             alert("Please enter a valid Gmail address.");
             return;
          }
 
          // Generate OTP
          generatedOtp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
-         alert(OTP sent to ${email}: ${generatedOtp}); // Simulate email by showing OTP in alert
+         alert(`OTP sent to ${email}: ${generatedOtp}`); // Simulate email by showing OTP in alert
 
          // Show OTP input field
          document.getElementById("otp").style.display = "block";
@@ -95,33 +98,4 @@
       }
 
       function verifyOtp() {
-         const enteredOtp = document.getElementById("otp").value;
-         if (parseInt(enteredOtp) === generatedOtp) {
-            alert("OTP verified successfully!");
-            document.getElementById("submit-btn").disabled = false;
-            document.getElementById("otp-message").textContent = "";
-            clearTimeout(otpTimer);
-         } else {
-            alert("Incorrect OTP. Please try again.");
-            document.getElementById("otp").value = "";
-         }
-      }
-
-      function registerUser(event) {
-         event.preventDefault();
-
-         const name = document.getElementById("name").value;
-         const dob = document.getElementById("dob").value;
-         const phone = document.getElementById("phone").value;
-         const email = document.getElementById("email").value;
-         const password = document.getElementById("password").value;
-
-         // Store user data in localStorage
-         localStorage.setItem("user", JSON.stringify({ name, dob, phone, email, password }));
-
-         alert("Registration successful!");
-         window.location.href = "login.html"; // Redirect to login page
-      }
-   </script>
-</body>
-</html>
+         const enteredOtp = document
