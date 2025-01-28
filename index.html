@@ -5,14 +5,14 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
    <link rel="stylesheet" href="assets/css/styles.css">
-   <title>Login with OTP</title>
+   <title>Login Page</title>
 </head>
 <body>
    <div class="login">
       <img src="assets/img/login-bg.png" alt="A person logging in" class="login__img">
 
-      <form onsubmit="return verifyEmail(event)" class="login__form" id="email-form">
-         <h1 class="login__title">Login with OTP</h1>
+      <form onsubmit="return verify(event)" class="login__form">
+         <h1 class="login__title">Login</h1>
 
          <div class="login__content">
             <div class="login__box">
@@ -22,61 +22,69 @@
                   <label for="login-email" class="login__label">Email</label>
                </div>
             </div>
-         </div>
 
-         <button type="submit" class="login__button">Send OTP</button>
-      </form>
-
-      <form onsubmit="return verifyOTP(event)" class="login__form" id="otp-form" style="display: none;">
-         <h1 class="login__title">Enter OTP</h1>
-
-         <div class="login__content">
             <div class="login__box">
-               <i class="ri-shield-keyhole-line login__icon"></i>
+               <i class="ri-lock-2-line login__icon"></i>
                <div class="login__box-input">
-                  <input type="text" required class="login__input" id="login-otp" placeholder=" ">
-                  <label for="login-otp" class="login__label">OTP</label>
+                  <input type="password" required class="login__input" id="login-pass" placeholder=" ">
+                  <label for="login-pass" class="login__label">Password</label>
+                  <i class="ri-eye-off-line login__eye" id="login-eye" onclick="togglePassword()"></i>
                </div>
             </div>
          </div>
 
-         <button type="submit" class="login__button">Verify OTP</button>
+         <div class="login__check">
+            <div class="login__check-group">
+               <input type="checkbox" class="login__check-input" id="login-check">
+               <label for="login-check" class="login__check-label">Remember me</label>
+            </div>
+            <a href="#" class="login__forgot">Forgot Password?</a>
+         </div>
+
+         <button type="submit" class="login__button">Login</button>
+
+         <p class="login__register">
+            Don't have an account? <a href="#">Register</a>
+         </p>
       </form>
    </div>
-
+   
    <script>
-      let generatedOTP = "";
-
-      function verifyEmail(event) {
-         event.preventDefault();
+      function verify(event) {
+         event.preventDefault(); 
          const email = document.getElementById("login-email").value;
+         const password = document.getElementById("login-pass").value;
 
-         // Check if the email matches your Gmail ID
-         if (email !== "subhashmanepalli2005@gmail.com") {
+         // Regex for password validation: at least 9 characters, at least one letter, one number, and one special character
+         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{9,}$/;
+
+         // Check if the email ends with @gmail.com
+         if (!email.endsWith("@gmail.com")) {
             alert("Please enter a valid Gmail address.");
+         } else if (!passwordRegex.test(password)) {
+            alert("Password must be at least 9 characters long, include at least one number, one alphabet, and one special character.");
          } else {
-            // Generate a random 6-digit OTP
-            generatedOTP = Math.floor(100000 + Math.random() * 900000);
-            alert(`OTP sent to ${email}: ${generatedOTP}`); // Simulate OTP sent
-
-            // Hide email form and show OTP form
-            document.getElementById("email-form").style.display = "none";
-            document.getElementById("otp-form").style.display = "block";
+            // Simulate successful login
+            window.location.href = "details.html"; 
          }
       }
 
-      function verifyOTP(event) {
-         event.preventDefault();
-         const enteredOTP = document.getElementById("login-otp").value;
-
-         // Verify the entered OTP
-         if (enteredOTP == generatedOTP) {
-            alert("OTP verified successfully!");
-            window.location.href = "success.html"; // Redirect to success page
+      function togglePassword() {
+         const passwordInput = document.getElementById("login-pass");
+         const eyeIcon = document.getElementById("login-eye");
+         if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove("ri-eye-off-line");
+            eyeIcon.classList.add("ri-eye-line");
          } else {
-            alert("Invalid OTP. Please try again.");
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("ri-eye-line");
+            eyeIcon.classList.add("ri-eye-off-line");
          }
       }
    </script>
 </body>
 </html>
+
+
+give me same code and template with this otp verification my email id is "subhashmanepalli2005@gmail.com"give me simple code for login form with otp verification 
