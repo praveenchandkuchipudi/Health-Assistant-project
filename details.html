@@ -65,6 +65,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
+        
 
         .detail-card:hover {
             transform: translateY(-10px);
@@ -138,36 +139,37 @@
             </div>
         </div>
 
-        <form action="second_page.php" method="post" class="details-grid">
+        <div class="details-grid">
             <div class="detail-card">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="Enter your name" required>
+                <input type="text" placeholder="Enter your name">
             </div>
             <div class="detail-card">
                 <label>Weight (kg)</label>
-                <input type="number" name="weight" placeholder="Your weight" required>
+                <input type="number" placeholder="Your weight">
             </div>
             <div class="detail-card">
                 <label>Height (cm)</label>
-                <input type="number" name="height" placeholder="Your height" required>
+                <input type="number" placeholder="Your height">
             </div>
             <div class="detail-card">
                 <label>Age</label>
-                <input type="number" name="age" placeholder="Your age" required>
+                <input type="number" placeholder="Your age">
             </div>
             <div class="detail-card">
                 <label>Gender</label>
                 <div>
-                    <input type="radio" id="male" name="gender" value="Male" required>
+                    <input type="radio" id="male" name="gender">
                     <label for="male">Male</label>
-                    <input type="radio" id="female" name="gender" value="Female">
+                    <input type="radio" id="female" name="gender">
                     <label for="female">Female</label>
                 </div>
             </div>
             <div class="detail-card">
-                <input type="submit" class="submit-button" value="Continue">
+                <a href="webpage.html"><button class="submit-button" >Continue</button></a>
             </div>
-        </form>
+        </div>
     </div>
 </body>
 </html>
+       
