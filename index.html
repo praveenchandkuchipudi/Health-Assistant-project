@@ -1,87 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-   <link rel="stylesheet" href="assets/css/styles.css">
-   <title>Login Page</title>
-</head>
-<body>
-   <div class="login">
-      <img src="assets/img/login-bg.png" alt="A person logging in" class="login__img">
+mport sys
 
-      <form onsubmit="return verify(event)" class="login__form">
-         <h1 class="login__title">Login</h1>
+def delete_elements(lst, item):
+    """
+    Recursively removes all occurrences of 'item' from 'lst' and returns a new list.
+    Args:
+        lst: The input list.
+        item: The item to be removed.
+    Returns:
+        A new list with all occurrences of 'item' removed.
+    """ 
+    if not lst:
+        return []
+    if lst[0] == item:
+        return delete_elements(lst[1:], item)
+    else:
+        return [lst[0]] + delete_elements(lst[1:], item)
 
-         <div class="login__content">
-            <div class="login__box">
-               <i class="ri-user-3-line login__icon"></i>
-               <div class="login__box-input">
-                  <input type="email" required class="login__input" id="login-email" placeholder=" ">
-                  <label for="login-email" class="login__label">Email</label>
-               </div>
-            </div>
-
-            <div class="login__box">
-               <i class="ri-lock-2-line login__icon"></i>
-               <div class="login__box-input">
-                  <input type="password" required class="login__input" id="login-pass" placeholder=" ">
-                  <label for="login-pass" class="login__label">Password</label>
-                  <i class="ri-eye-off-line login__eye" id="login-eye" onclick="togglePassword()"></i>
-               </div>
-            </div>
-         </div>
-
-         <div class="login__check">
-            <div class="login__check-group">
-               <input type="checkbox" class="login__check-input" id="login-check">
-               <label for="login-check" class="login__check-label">Remember me</label>
-            </div>
-            <a href="#" class="login__forgot">Forgot Password?</a>
-         </div>
-
-         <button type="submit" class="login__button">Login</button>
-
-         <p class="login__register">
-            Don't have an account? <a href="#">Register</a>
-         </p>
-      </form>
-   </div>
-   
-   <script>
-      function verify(event) {
-         event.preventDefault(); 
-         const email = document.getElementById("login-email").value;
-         const password = document.getElementById("login-pass").value;
-
-         // Regex for password validation: at least 9 characters, at least one letter, one number, and one special character
-         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{9,}$/;
-
-         // Check if the email ends with @gmail.com
-         if (!email.endsWith("@gmail.com")) {
-            alert("Please enter a valid Gmail address.");
-         } else if (!passwordRegex.test(password)) {
-            alert("Password must be at least 9 characters long, include at least one number, one alphabet, and one special character.");
-         } else {
-            // Simulate successful login
-            window.location.href = "details.html"; 
-         }
-      }
-
-      function togglePassword() {
-         const passwordInput = document.getElementById("login-pass");
-         const eyeIcon = document.getElementById("login-eye");
-         if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            eyeIcon.classList.remove("ri-eye-off-line");
-            eyeIcon.classList.add("ri-eye-line");
-         } else {
-            passwordInput.type = "password";
-            eyeIcon.classList.remove("ri-eye-line");
-            eyeIcon.classList.add("ri-eye-off-line");
-         }
-      }
-   </script>
-</body>
-</html>
+try:
+    # Read input from standard input (handling EOFError)
+    lst = list(map(int, sys.stdin.read().split()))
+    item = lst.pop()  # Last element is the item to be removed
+    new_list = delete_elements(lst, item)
+    
+    # Print space-separated output to match expected output format
+    print(*new_list)
+except EOFError:
+    print("Error: No input provided")
